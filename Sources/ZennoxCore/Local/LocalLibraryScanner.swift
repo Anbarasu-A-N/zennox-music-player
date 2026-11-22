@@ -1,5 +1,9 @@
 import Foundation
 
+extension ScanReport {
+    public init() {}
+}
+
 public struct ScanReport: Equatable, Sendable {
     public var added = 0
     public var updated = 0

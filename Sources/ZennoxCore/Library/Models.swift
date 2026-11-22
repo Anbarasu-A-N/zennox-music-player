@@ -16,6 +16,10 @@ public struct LibraryRoot: Equatable, Sendable {
     public let displayPath: String
     public let accessToken: String?
     public let status: RootStatus
+
+    public init(id: RootID, kind: RootKind, displayPath: String, accessToken: String?, status: RootStatus) {
+        self.id = id; self.kind = kind; self.displayPath = displayPath; self.accessToken = accessToken; self.status = status
+    }
 }
 
 /// What the library last recorded about a local file, for matching during a rescan.

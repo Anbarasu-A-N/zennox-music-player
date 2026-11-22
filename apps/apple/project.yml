@@ -1,0 +1,61 @@
+# XcodeGen spec: `brew install xcodegen && cd apps/apple && xcodegen generate` creates the Xcode project.
+# The generated .xcodeproj is not committed (see .gitignore).
+name: ZennoxMusicPlayer
+options:
+  bundleIdPrefix: com.anbarasu.zennox
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+  createIntermediateGroups: true
+packages:
+  Zennox:
+    path: ../..
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    PRODUCT_NAME: "Zennox Music Player"
+    PRODUCT_BUNDLE_IDENTIFIER: com.anbarasu.zennox.music
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_CFBundleDisplayName: "Zennox Music Player"
+    INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.music
+targets:
+  ZennoxMusicPlayer-macOS:
+    type: application
+    platform: macOS
+    sources: [Shared]
+    dependencies:
+      - package: Zennox
+        product: ZennoxUI
+    scheme: {}
+    settings:
+      base:
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"        # ad-hoc ("Sign to Run Locally"): no Apple account needed
+        DEVELOPMENT_TEAM: ""
+        ENABLE_HARDENED_RUNTIME: YES
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Plays your own music. Never copies or uploads it."
+    entitlements:
+      path: macOS/ZennoxMusicPlayer.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.files.user-selected.read-only: true   # only folders you pick
+        com.apple.security.files.bookmarks.app-scope: true        # remember those folders
+        com.apple.security.network.client: true                   # Google Drive (next build)
+  ZennoxMusicPlayer-iOS:
+    type: application
+    platform: iOS
+    sources: [Shared]
+    dependencies:
+      - package: Zennox
+        product: ZennoxUI
+    scheme: {}
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic      # set your free Apple ID team in Xcode to run on a device
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"

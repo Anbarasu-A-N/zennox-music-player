@@ -15,6 +15,10 @@ public struct DriveRefreshReport: Equatable, Sendable {
     public var inaccessible = 0  // deleted or access revoked (Drive does not say which)
 }
 
+// In extensions so the memberwise initializers stay available.
+extension DriveImportReport { public init() {} }
+extension DriveRefreshReport { public init() {} }
+
 /// Turns Picker selections into library tracks (external_id = Drive file ID) and re-checks them
 /// later. Reads only a bounded prefix (and tail when needed) of each file; never downloads whole
 /// files and never writes to Drive.

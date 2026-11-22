@@ -20,7 +20,7 @@ public struct TrackRow: Equatable, Sendable {
     public let isFavorite: Bool
 }
 
-public struct AlbumRow: Equatable, Sendable {
+public struct AlbumRow: Hashable, Sendable {
     public let title: String
     /// Album artist when tagged, else track artist; "" when unknown.
     public let artist: String
@@ -29,13 +29,13 @@ public struct AlbumRow: Equatable, Sendable {
     public let hasLossless: Bool
 }
 
-public struct ArtistRow: Equatable, Sendable {
+public struct ArtistRow: Hashable, Sendable {
     public let name: String
     public let trackCount: Int
     public let albumCount: Int
 }
 
-public struct FolderRow: Equatable, Sendable {
+public struct FolderRow: Hashable, Sendable {
     public let path: String
     public let trackCount: Int
 }

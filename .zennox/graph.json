@@ -1,58 +1,114 @@
 {
   "root": "/home/claude/music-player",
-  "files": 23,
+  "files": 45,
   "edges": 0,
   "languages": {
-    "swift": 20,
+    "swift": 42,
     "py": 3
   },
   "nodes": [
     {
       "id": "Package.swift",
       "lang": "swift",
-      "loc": 24,
+      "loc": 30,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Auth/GoogleOAuth.swift",
+      "lang": "swift",
+      "loc": 160,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Auth/KeychainStore.swift",
+      "lang": "swift",
+      "loc": 51,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Auth/TokenManager.swift",
+      "lang": "swift",
+      "loc": 129,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Database/SQLiteDatabase.swift",
       "lang": "swift",
-      "loc": 152,
+      "loc": 153,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Database/Schema.swift",
       "lang": "swift",
-      "loc": 135,
+      "loc": 178,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Drive/DriveLibraryImporter.swift",
+      "lang": "swift",
+      "loc": 127,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Drive/GoogleDriveClient.swift",
+      "lang": "swift",
+      "loc": 167,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Library/DuplicateDetector.swift",
+      "lang": "swift",
+      "loc": 241,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Library/LibraryQueries.swift",
+      "lang": "swift",
+      "loc": 210,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Library/LibraryStore.swift",
       "lang": "swift",
-      "loc": 251,
+      "loc": 285,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Library/Models.swift",
       "lang": "swift",
-      "loc": 108,
+      "loc": 121,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Library/QualityFormatter.swift",
+      "lang": "swift",
+      "loc": 59,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Local/FileAccess.swift",
       "lang": "swift",
-      "loc": 83,
+      "loc": 104,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Local/LocalLibraryScanner.swift",
       "lang": "swift",
-      "loc": 104,
+      "loc": 108,
       "in": 0,
       "out": 0
     },
@@ -120,6 +176,90 @@
       "out": 0
     },
     {
+      "id": "Sources/ZennoxCore/Support/LogRedactor.swift",
+      "lang": "swift",
+      "loc": 23,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Support/MD5.swift",
+      "lang": "swift",
+      "loc": 90,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Support/SHA256.swift",
+      "lang": "swift",
+      "loc": 103,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxUI/AppModel.swift",
+      "lang": "swift",
+      "loc": 198,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxUI/Theme.swift",
+      "lang": "swift",
+      "loc": 35,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxUI/Views/LibraryViews.swift",
+      "lang": "swift",
+      "loc": 172,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxUI/Views/RootView.swift",
+      "lang": "swift",
+      "loc": 108,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxUI/Views/TrackRowView.swift",
+      "lang": "swift",
+      "loc": 76,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/AuthTests.swift",
+      "lang": "swift",
+      "loc": 224,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/DriveTests.swift",
+      "lang": "swift",
+      "loc": 225,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/DuplicateDetectorTests.swift",
+      "lang": "swift",
+      "loc": 133,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/LibraryQueriesTests.swift",
+      "lang": "swift",
+      "loc": 129,
+      "in": 0,
+      "out": 0
+    },
+    {
       "id": "Tests/ZennoxCoreTests/LibraryStoreTests.swift",
       "lang": "swift",
       "loc": 114,
@@ -129,7 +269,7 @@
     {
       "id": "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift",
       "lang": "swift",
-      "loc": 165,
+      "loc": 182,
       "in": 0,
       "out": 0
     },
@@ -148,16 +288,30 @@
       "out": 0
     },
     {
+      "id": "Tests/ZennoxCoreTests/QualityFormatterTests.swift",
+      "lang": "swift",
+      "loc": 24,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "apps/apple/Shared/ZennoxMusicPlayerApp.swift",
+      "lang": "swift",
+      "loc": 36,
+      "in": 0,
+      "out": 0
+    },
+    {
       "id": "tools/schema_test.py",
       "lang": "py",
-      "loc": 85,
+      "loc": 135,
       "in": 0,
       "out": 0
     },
     {
       "id": "tools/spike_drive_picker.py",
       "lang": "py",
-      "loc": 216,
+      "loc": 225,
       "in": 0,
       "out": 0
     },
@@ -171,9 +325,11 @@
   ],
   "adjacency": {},
   "external": {
-    "Foundation": 15,
-    "XCTest": 4,
-    "ZennoxCore": 4,
+    "Foundation": 27,
+    "ZennoxCore": 13,
+    "XCTest": 9,
+    "FoundationNetworking": 5,
+    "SwiftUI": 5,
     "urllib": 4,
     "sys": 3,
     "pathlib": 2,
@@ -185,6 +341,14 @@
     "PackageDescription": 1,
     "SQLite3": 1,
     "CSQLite": 1,
+    "Security": 1,
+    "Darwin": 1,
+    "Glibc": 1,
+    "Android": 1,
+    "Observation": 1,
+    "UIKit": 1,
+    "AppKit": 1,
+    "UniformTypeIdentifiers": 1,
     "spike_drive_picker": 1,
     "tempfile": 1,
     "argparse": 1,
@@ -194,17 +358,26 @@
     "time": 1,
     "webbrowser": 1,
     "re": 1,
-    "sqlite3": 1
+    "sqlite3": 1,
+    "ZennoxUI": 1
   },
   "god_nodes": [],
   "hubs": [],
   "cycles": [],
   "orphans": [
     "Package.swift",
+    "Sources/ZennoxCore/Auth/GoogleOAuth.swift",
+    "Sources/ZennoxCore/Auth/KeychainStore.swift",
+    "Sources/ZennoxCore/Auth/TokenManager.swift",
     "Sources/ZennoxCore/Database/SQLiteDatabase.swift",
     "Sources/ZennoxCore/Database/Schema.swift",
+    "Sources/ZennoxCore/Drive/DriveLibraryImporter.swift",
+    "Sources/ZennoxCore/Drive/GoogleDriveClient.swift",
+    "Sources/ZennoxCore/Library/DuplicateDetector.swift",
+    "Sources/ZennoxCore/Library/LibraryQueries.swift",
     "Sources/ZennoxCore/Library/LibraryStore.swift",
     "Sources/ZennoxCore/Library/Models.swift",
+    "Sources/ZennoxCore/Library/QualityFormatter.swift",
     "Sources/ZennoxCore/Local/FileAccess.swift",
     "Sources/ZennoxCore/Local/LocalLibraryScanner.swift",
     "Sources/ZennoxCore/Local/SecurityScopedBookmark.swift",
@@ -216,20 +389,34 @@
     "Sources/ZennoxCore/Metadata/MetadataReader.swift",
     "Sources/ZennoxCore/Metadata/OggParser.swift",
     "Sources/ZennoxCore/Metadata/RIFFParsers.swift",
+    "Sources/ZennoxCore/Support/LogRedactor.swift",
+    "Sources/ZennoxCore/Support/MD5.swift",
+    "Sources/ZennoxCore/Support/SHA256.swift",
+    "Sources/ZennoxUI/AppModel.swift",
+    "Sources/ZennoxUI/Theme.swift",
+    "Sources/ZennoxUI/Views/LibraryViews.swift",
+    "Sources/ZennoxUI/Views/RootView.swift",
+    "Sources/ZennoxUI/Views/TrackRowView.swift",
+    "Tests/ZennoxCoreTests/AuthTests.swift",
+    "Tests/ZennoxCoreTests/DriveTests.swift",
+    "Tests/ZennoxCoreTests/DuplicateDetectorTests.swift",
+    "Tests/ZennoxCoreTests/LibraryQueriesTests.swift",
     "Tests/ZennoxCoreTests/LibraryStoreTests.swift",
     "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift",
     "Tests/ZennoxCoreTests/MP4OggMetadataTests.swift",
     "Tests/ZennoxCoreTests/MetadataReaderTests.swift",
+    "Tests/ZennoxCoreTests/QualityFormatterTests.swift",
+    "apps/apple/Shared/ZennoxMusicPlayerApp.swift",
     "tools/spike_drive_picker.py"
   ],
   "clusters": {
     "Sources": {
-      "files": 15,
+      "files": 31,
       "intra": 0,
       "inter": 0
     },
     "Tests": {
-      "files": 4,
+      "files": 9,
       "intra": 0,
       "inter": 0
     },
@@ -239,6 +426,11 @@
       "inter": 0
     },
     "(root)": {
+      "files": 1,
+      "intra": 0,
+      "inter": 0
+    },
+    "apps/apple": {
       "files": 1,
       "intra": 0,
       "inter": 0

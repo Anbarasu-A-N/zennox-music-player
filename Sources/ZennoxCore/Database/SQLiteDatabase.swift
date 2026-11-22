@@ -49,6 +49,7 @@ public final class SQLiteDatabase {
         handle = opened
         try execute("PRAGMA foreign_keys = ON;")
         try execute("PRAGMA journal_mode = WAL;")
+        try execute("PRAGMA busy_timeout = 5000;")  // UI and background scan use separate connections
     }
 
     deinit { sqlite3_close(handle) }

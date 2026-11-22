@@ -1,10 +1,10 @@
 {
   "Package.swift": {
-    "h": "50bda1d668f1a860",
+    "h": "2be96ddb76155421",
     "imports": [
       "PackageDescription"
     ],
-    "loc": 24,
+    "loc": 30,
     "dom": false
   },
   "Tests/ZennoxCoreTests/LibraryStoreTests.swift": {
@@ -26,12 +26,59 @@
     "dom": false
   },
   "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift": {
-    "h": "b44b98285dbbdc90",
+    "h": "8ea012e0a453539e",
     "imports": [
       "XCTest",
       "ZennoxCore"
     ],
-    "loc": 165,
+    "loc": 182,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/DriveTests.swift": {
+    "h": "dc8d861236cb5cb1",
+    "imports": [
+      "XCTest",
+      "FoundationNetworking",
+      "ZennoxCore"
+    ],
+    "loc": 225,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/LibraryQueriesTests.swift": {
+    "h": "44d4d9a71df8d9a1",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 129,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/AuthTests.swift": {
+    "h": "9135220c678123e1",
+    "imports": [
+      "XCTest",
+      "FoundationNetworking",
+      "ZennoxCore"
+    ],
+    "loc": 224,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/QualityFormatterTests.swift": {
+    "h": "50444ec72091cd38",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 24,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/DuplicateDetectorTests.swift": {
+    "h": "202dcfd6133b016d",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 133,
     "dom": false
   },
   "Tests/ZennoxCoreTests/MetadataReaderTests.swift": {
@@ -44,21 +91,72 @@
     "dom": false
   },
   "Sources/ZennoxCore/Database/Schema.swift": {
-    "h": "a396a4f49a3b115a",
+    "h": "34b01337b7bcfeef",
     "imports": [
       "Foundation"
     ],
-    "loc": 135,
+    "loc": 178,
     "dom": false
   },
   "Sources/ZennoxCore/Database/SQLiteDatabase.swift": {
-    "h": "273ca732c79e155d",
+    "h": "617149a0a7758da5",
     "imports": [
       "Foundation",
       "SQLite3",
       "CSQLite"
     ],
-    "loc": 152,
+    "loc": 153,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Auth/GoogleOAuth.swift": {
+    "h": "061df6e568b20ef0",
+    "imports": [
+      "Foundation",
+      "FoundationNetworking"
+    ],
+    "loc": 160,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Auth/KeychainStore.swift": {
+    "h": "2a78438b7fbaec30",
+    "imports": [
+      "Foundation",
+      "Security"
+    ],
+    "loc": 51,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Auth/TokenManager.swift": {
+    "h": "bfc66fb13336adca",
+    "imports": [
+      "Foundation",
+      "FoundationNetworking"
+    ],
+    "loc": 129,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Support/LogRedactor.swift": {
+    "h": "429699266e87e56d",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 23,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Support/MD5.swift": {
+    "h": "32994a217cb6af3c",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 90,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Support/SHA256.swift": {
+    "h": "eb78495efc423df2",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 103,
     "dom": false
   },
   "Sources/ZennoxCore/Local/SecurityScopedBookmark.swift": {
@@ -70,35 +168,79 @@
     "dom": false
   },
   "Sources/ZennoxCore/Local/FileAccess.swift": {
-    "h": "bbad318c35899a7a",
+    "h": "e9c8ec7cdd413933",
     "imports": [
-      "Foundation"
-    ],
-    "loc": 83,
-    "dom": false
-  },
-  "Sources/ZennoxCore/Local/LocalLibraryScanner.swift": {
-    "h": "2d4c1108ebc10e44",
-    "imports": [
-      "Foundation"
+      "Foundation",
+      "Darwin",
+      "Glibc",
+      "Android"
     ],
     "loc": 104,
     "dom": false
   },
-  "Sources/ZennoxCore/Library/LibraryStore.swift": {
-    "h": "3b592ee302bee052",
-    "imports": [
-      "Foundation"
-    ],
-    "loc": 251,
-    "dom": false
-  },
-  "Sources/ZennoxCore/Library/Models.swift": {
-    "h": "9e6d14e37880f9d7",
+  "Sources/ZennoxCore/Local/LocalLibraryScanner.swift": {
+    "h": "92aadb9b15e6fcb4",
     "imports": [
       "Foundation"
     ],
     "loc": 108,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Drive/DriveLibraryImporter.swift": {
+    "h": "4239f99e392b244e",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 127,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Drive/GoogleDriveClient.swift": {
+    "h": "5ea34a47143632ad",
+    "imports": [
+      "Foundation",
+      "FoundationNetworking"
+    ],
+    "loc": 167,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/LibraryStore.swift": {
+    "h": "7c921bdfdb4830f3",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 285,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/Models.swift": {
+    "h": "4675530d5faef4ac",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 121,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/DuplicateDetector.swift": {
+    "h": "d47639c5bde41ca1",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 241,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/LibraryQueries.swift": {
+    "h": "aa9774a22a12ea69",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 210,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/QualityFormatter.swift": {
+    "h": "e0d8d79996534504",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 59,
     "dom": false
   },
   "Sources/ZennoxCore/Metadata/OggParser.swift": {
@@ -165,6 +307,54 @@
     "loc": 61,
     "dom": false
   },
+  "Sources/ZennoxUI/AppModel.swift": {
+    "h": "9ffae82f6b35ec4b",
+    "imports": [
+      "Foundation",
+      "Observation",
+      "ZennoxCore"
+    ],
+    "loc": 198,
+    "dom": false
+  },
+  "Sources/ZennoxUI/Theme.swift": {
+    "h": "e969c7d8dbd6141c",
+    "imports": [
+      "SwiftUI",
+      "UIKit",
+      "AppKit"
+    ],
+    "loc": 35,
+    "dom": false
+  },
+  "Sources/ZennoxUI/Views/RootView.swift": {
+    "h": "b9b7eed39492eed0",
+    "imports": [
+      "SwiftUI",
+      "UniformTypeIdentifiers",
+      "ZennoxCore"
+    ],
+    "loc": 108,
+    "dom": false
+  },
+  "Sources/ZennoxUI/Views/TrackRowView.swift": {
+    "h": "3bf55b62363f53a2",
+    "imports": [
+      "SwiftUI",
+      "ZennoxCore"
+    ],
+    "loc": 76,
+    "dom": false
+  },
+  "Sources/ZennoxUI/Views/LibraryViews.swift": {
+    "h": "1b3a1bc7699b31c2",
+    "imports": [
+      "SwiftUI",
+      "ZennoxCore"
+    ],
+    "loc": 172,
+    "dom": false
+  },
   "tools/test_spike_drive_picker.py": {
     "h": "1221bfe9a8677188",
     "imports": [
@@ -183,7 +373,7 @@
     "dom": false
   },
   "tools/spike_drive_picker.py": {
-    "h": "e9877c6bfd5fa45a",
+    "h": "5be692275939d798",
     "imports": [
       "argparse",
       "base64",
@@ -200,11 +390,11 @@
       "urllib.request",
       "webbrowser"
     ],
-    "loc": 216,
+    "loc": 225,
     "dom": false
   },
   "tools/schema_test.py": {
-    "h": "a1b42f8252dda5a1",
+    "h": "b827ed3c199e4e80",
     "imports": [
       "pathlib",
       "re",
@@ -212,7 +402,16 @@
       "sys",
       "unittest"
     ],
-    "loc": 85,
+    "loc": 135,
+    "dom": false
+  },
+  "apps/apple/Shared/ZennoxMusicPlayerApp.swift": {
+    "h": "874d87897b88a4e6",
+    "imports": [
+      "SwiftUI",
+      "ZennoxUI"
+    ],
+    "loc": 36,
     "dom": false
   }
 }

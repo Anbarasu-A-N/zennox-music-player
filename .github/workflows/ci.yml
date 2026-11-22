@@ -25,3 +25,37 @@ jobs:
       - uses: actions/checkout@v4
       - run: apt-get update && apt-get install -y libsqlite3-dev
       - run: swift test
+
+  apple-app:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Xcode project
+        run: brew install xcodegen && cd apps/apple && xcodegen generate
+      - name: Build macOS app (universal, ad-hoc signed, sandboxed)
+        run: |
+          set -o pipefail
+          cd apps/apple
+          xcodebuild -project ZennoxMusicPlayer.xcodeproj -scheme ZennoxMusicPlayer-macOS -configuration Release \
+            -derivedDataPath build -destination 'generic/platform=macOS' build | tail -n 40
+      - name: Build iOS app (simulator, unsigned)
+        run: |
+          set -o pipefail
+          cd apps/apple
+          xcodebuild -project ZennoxMusicPlayer.xcodeproj -scheme ZennoxMusicPlayer-iOS -configuration Debug \
+            -derivedDataPath build-ios -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build | tail -n 40
+      - name: Verify signature and package
+        run: |
+          APP="apps/apple/build/Build/Products/Release/Zennox Music Player.app"
+          codesign --verify --deep --strict "$APP"
+          codesign -d --entitlements - "$APP"
+          lipo -archs "$APP/Contents/MacOS/Zennox Music Player"
+          ditto -c -k --keepParent "$APP" Zennox-Music-Player-macOS.zip
+          shasum -a 256 Zennox-Music-Player-macOS.zip > SHA256SUMS
+          cat SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Zennox-Music-Player-macOS
+          path: |
+            Zennox-Music-Player-macOS.zip
+            SHA256SUMS

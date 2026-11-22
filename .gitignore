@@ -12,3 +12,5 @@ GoogleService-Info.plist
 Secrets.xcconfig
 client_secret*.json
 spike-results/
+apps/apple/*.xcodeproj/
+apps/apple/build/
