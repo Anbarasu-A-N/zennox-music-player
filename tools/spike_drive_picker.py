@@ -159,6 +159,16 @@ def main():
     report = {"date": time.strftime("%Y-%m-%d"), "granted_scope": tok.get("scope"),
               "refresh_token_issued": "refresh_token" in tok, "picked_count": len(picked), "items": []}
 
+    # L4 needs a stable per-account id without extra scopes: does about.get work with drive.file alone?
+    try:
+        st, _, raw = http_json("GET", f"{DRIVE}/about?fields=user(permissionId,displayName,emailAddress)", access)
+        user = json.loads(raw).get("user", {})
+        report["about_status"] = st
+        report["about_has_permission_id"] = bool(user.get("permissionId"))
+        report["about_has_email"] = bool(user.get("emailAddress"))
+    except urllib.error.HTTPError as e:
+        report["about_status"] = e.code
+
     def name(f):
         return f.get("name") if args.show_names else f"<{f['mimeType']}>"
 
