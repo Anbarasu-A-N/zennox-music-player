@@ -86,32 +86,3 @@ enum AIFFParser {
         return Double(mantissa) * pow(2.0, Double(exponent - 16383 - 63))
     }
 }
-
-enum OggParser {
-    /// Identifies the codec from the first Ogg page. Duration and comments need later pages (L2b).
-    static func parse(_ bytes: [UInt8]) -> AudioMetadata {
-        var m = AudioMetadata()
-        m.container = .ogg
-        guard bytes.count >= 27 else { return m }
-        let payload = 27 + Int(bytes[26])
-        var r = ByteReader(bytes, offset: payload)
-        if bytes.hasPrefix("OpusHead", at: payload) {
-            m.codec = .opus
-            do {
-                try r.skip(9)
-                m.channels = Int(try r.u8())
-                m.sampleRate = 48_000  // Opus always decodes at 48 kHz
-            } catch {}
-        } else if bytes.count > payload, bytes[payload] == 0x01, bytes.hasPrefix("vorbis", at: payload + 1) {
-            m.codec = .vorbis
-            do {
-                try r.skip(11)
-                m.channels = Int(try r.u8())
-                m.sampleRate = Int(try r.u32le())
-            } catch {}
-        } else if bytes.count > payload, bytes[payload] == 0x7F, bytes.hasPrefix("FLAC", at: payload + 1) {
-            m.codec = .flac
-        }
-        return m
-    }
-}

@@ -21,6 +21,9 @@ public struct AudioMetadata: Equatable, Sendable {
     public var trackNumber: Int?
     public var discNumber: Int?
     public var hasArtwork = false
+    /// The fields above are incomplete until the reader also sees the file's last bytes
+    /// (MP4 with moov at the end; Ogg duration). Fetch `MetadataReader.recommendedTailBytes` and read again.
+    public var needsTailBytes = false
 
     public var isLossless: Bool { codec.isLossless }
 
