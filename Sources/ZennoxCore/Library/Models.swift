@@ -93,6 +93,15 @@ extension TrackInput {
     }
 }
 
+/// What the library last recorded about a cloud file, for change detection on refresh.
+public struct RemoteTrack: Equatable, Sendable {
+    public let trackID: TrackID
+    public let externalID: String
+    public let contentHash: String?
+    public let modified: Int64?
+    public let status: TrackStatus
+}
+
 public struct TrackSummary: Equatable, Sendable {
     public let id: TrackID
     public let title: String

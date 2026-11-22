@@ -157,6 +157,29 @@ public final class LibraryStore {
         try db.run("DELETE FROM playlist WHERE id = ?;", [.int(playlist.rawValue)])
     }
 
+    // MARK: Remote (cloud) tracks
+
+    public func trackID(source: SourceID, externalID: String) throws -> TrackID? {
+        try db.query("SELECT id FROM track WHERE source_id = ? AND external_id = ?;",
+                     [.int(source.rawValue), .text(externalID)]).first?.int("id").map(TrackID.init(rawValue:))
+    }
+
+    /// Stores the provider's content hash (e.g. "md5:…") and modification time for change detection.
+    public func setRemoteInfo(_ track: TrackID, contentHash: String?, modified: Int64?) throws {
+        try db.run("UPDATE track SET content_hash = ?, file_modified = ? WHERE id = ?;",
+                   [Self.opt(contentHash), Self.opt(modified), .int(track.rawValue)])
+    }
+
+    public func remoteTracks(in source: SourceID) throws -> [RemoteTrack] {
+        try db.query("SELECT id, external_id, content_hash, file_modified, status FROM track WHERE source_id = ? ORDER BY id;",
+                     [.int(source.rawValue)]).compactMap { row in
+            guard let id = row.int("id"), let external = row.text("external_id") else { return nil }
+            return RemoteTrack(trackID: TrackID(rawValue: id), externalID: external, contentHash: row.text("content_hash"),
+                               modified: row.int("file_modified"),
+                               status: TrackStatus(rawValue: row.text("status") ?? "") ?? .ok)
+        }
+    }
+
     // MARK: Local roots
 
     /// Adds (or re-grants) a folder/file root. Re-adding the same path keeps its tracks.
