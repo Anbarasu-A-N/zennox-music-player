@@ -1,10 +1,10 @@
 {
   "root": "/home/claude/music-player",
-  "files": 7,
+  "files": 23,
   "edges": 0,
   "languages": {
-    "swift": 6,
-    "py": 1
+    "swift": 20,
+    "py": 3
   },
   "nodes": [
     {
@@ -17,28 +17,105 @@
     {
       "id": "Sources/ZennoxCore/Database/SQLiteDatabase.swift",
       "lang": "swift",
-      "loc": 133,
+      "loc": 152,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Database/Schema.swift",
       "lang": "swift",
-      "loc": 114,
+      "loc": 135,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Library/LibraryStore.swift",
       "lang": "swift",
-      "loc": 168,
+      "loc": 251,
       "in": 0,
       "out": 0
     },
     {
       "id": "Sources/ZennoxCore/Library/Models.swift",
       "lang": "swift",
-      "loc": 70,
+      "loc": 108,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Local/FileAccess.swift",
+      "lang": "swift",
+      "loc": 83,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Local/LocalLibraryScanner.swift",
+      "lang": "swift",
+      "loc": 104,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Local/SecurityScopedBookmark.swift",
+      "lang": "swift",
+      "loc": 39,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/AudioMetadata.swift",
+      "lang": "swift",
+      "loc": 66,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/ByteReader.swift",
+      "lang": "swift",
+      "loc": 67,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/FLACParser.swift",
+      "lang": "swift",
+      "loc": 61,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/ID3Parser.swift",
+      "lang": "swift",
+      "loc": 125,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/MP4Parser.swift",
+      "lang": "swift",
+      "loc": 221,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/MetadataReader.swift",
+      "lang": "swift",
+      "loc": 32,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/OggParser.swift",
+      "lang": "swift",
+      "loc": 98,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Metadata/RIFFParsers.swift",
+      "lang": "swift",
+      "loc": 89,
       "in": 0,
       "out": 0
     },
@@ -50,26 +127,74 @@
       "out": 0
     },
     {
-      "id": "tests/schema_test.py",
+      "id": "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift",
+      "lang": "swift",
+      "loc": 165,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/MP4OggMetadataTests.swift",
+      "lang": "swift",
+      "loc": 179,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/MetadataReaderTests.swift",
+      "lang": "swift",
+      "loc": 241,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "tools/schema_test.py",
       "lang": "py",
-      "loc": 64,
+      "loc": 85,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "tools/spike_drive_picker.py",
+      "lang": "py",
+      "loc": 216,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "tools/test_spike_drive_picker.py",
+      "lang": "py",
+      "loc": 53,
       "in": 0,
       "out": 0
     }
   ],
   "adjacency": {},
   "external": {
-    "Foundation": 4,
+    "Foundation": 15,
+    "XCTest": 4,
+    "ZennoxCore": 4,
+    "urllib": 4,
+    "sys": 3,
+    "pathlib": 2,
+    "unittest": 2,
+    "base64": 2,
+    "hashlib": 2,
+    "os": 2,
+    "json": 2,
     "PackageDescription": 1,
-    "XCTest": 1,
-    "ZennoxCore": 1,
     "SQLite3": 1,
     "CSQLite": 1,
-    "pathlib": 1,
+    "spike_drive_picker": 1,
+    "tempfile": 1,
+    "argparse": 1,
+    "glob": 1,
+    "http": 1,
+    "secrets": 1,
+    "time": 1,
+    "webbrowser": 1,
     "re": 1,
-    "sqlite3": 1,
-    "sys": 1,
-    "unittest": 1
+    "sqlite3": 1
   },
   "god_nodes": [],
   "hubs": [],
@@ -80,25 +205,40 @@
     "Sources/ZennoxCore/Database/Schema.swift",
     "Sources/ZennoxCore/Library/LibraryStore.swift",
     "Sources/ZennoxCore/Library/Models.swift",
-    "Tests/ZennoxCoreTests/LibraryStoreTests.swift"
+    "Sources/ZennoxCore/Local/FileAccess.swift",
+    "Sources/ZennoxCore/Local/LocalLibraryScanner.swift",
+    "Sources/ZennoxCore/Local/SecurityScopedBookmark.swift",
+    "Sources/ZennoxCore/Metadata/AudioMetadata.swift",
+    "Sources/ZennoxCore/Metadata/ByteReader.swift",
+    "Sources/ZennoxCore/Metadata/FLACParser.swift",
+    "Sources/ZennoxCore/Metadata/ID3Parser.swift",
+    "Sources/ZennoxCore/Metadata/MP4Parser.swift",
+    "Sources/ZennoxCore/Metadata/MetadataReader.swift",
+    "Sources/ZennoxCore/Metadata/OggParser.swift",
+    "Sources/ZennoxCore/Metadata/RIFFParsers.swift",
+    "Tests/ZennoxCoreTests/LibraryStoreTests.swift",
+    "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift",
+    "Tests/ZennoxCoreTests/MP4OggMetadataTests.swift",
+    "Tests/ZennoxCoreTests/MetadataReaderTests.swift",
+    "tools/spike_drive_picker.py"
   ],
   "clusters": {
     "Sources": {
-      "files": 4,
-      "intra": 0,
-      "inter": 0
-    },
-    "(root)": {
-      "files": 1,
+      "files": 15,
       "intra": 0,
       "inter": 0
     },
     "Tests": {
-      "files": 1,
+      "files": 4,
       "intra": 0,
       "inter": 0
     },
-    "tests": {
+    "tools": {
+      "files": 3,
+      "intra": 0,
+      "inter": 0
+    },
+    "(root)": {
       "files": 1,
       "intra": 0,
       "inter": 0

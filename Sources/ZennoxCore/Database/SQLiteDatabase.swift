@@ -114,8 +114,27 @@ public final class SQLiteDatabase {
         return rows
     }
 
+    private var transactionDepth = 0
+
+    /// Runs `body` atomically. Nested calls become savepoints, so callers can compose.
     public func transaction<T>(_ body: () throws -> T) throws -> T {
+        if transactionDepth > 0 {
+            let name = "sp\(transactionDepth)"
+            try execute("SAVEPOINT \(name);")
+            transactionDepth += 1
+            defer { transactionDepth -= 1 }
+            do {
+                let result = try body()
+                try execute("RELEASE \(name);")
+                return result
+            } catch {
+                try? execute("ROLLBACK TO \(name); RELEASE \(name);")
+                throw error
+            }
+        }
         try execute("BEGIN IMMEDIATE;")
+        transactionDepth = 1
+        defer { transactionDepth = 0 }
         do {
             let result = try body()
             try execute("COMMIT;")

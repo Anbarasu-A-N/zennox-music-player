@@ -1,6 +1,6 @@
 # GRAPH_REPORT
 
-7 files · 0 internal import edges · languages: swift=6, py=1
+23 files · 0 internal import edges · languages: swift=20, py=3
 
 Read god nodes first; open neighbours with `project_graph.py <repo> --neighbors <file>`.
 
@@ -13,10 +13,10 @@ Read god nodes first; open neighbours with `project_graph.py <repo> --neighbors 
 ## Clusters
 | cluster | files | intra edges | outgoing inter edges |
 |---|---|---|---|
-| Sources | 4 | 0 | 0 |
+| Sources | 15 | 0 | 0 |
+| Tests | 4 | 0 | 0 |
+| tools | 3 | 0 | 0 |
 | (root) | 1 | 0 | 0 |
-| Tests | 1 | 0 | 0 |
-| tests | 1 | 0 | 0 |
 
 ## Layer violations (0)
 - none
@@ -24,13 +24,28 @@ Read god nodes first; open neighbours with `project_graph.py <repo> --neighbors 
 ## Import cycles (0)
 - none
 
-## Orphans — not imported, not an obvious entry point (6)
+## Orphans — not imported, not an obvious entry point (21)
 - `Package.swift`
 - `Sources/ZennoxCore/Database/SQLiteDatabase.swift`
 - `Sources/ZennoxCore/Database/Schema.swift`
 - `Sources/ZennoxCore/Library/LibraryStore.swift`
 - `Sources/ZennoxCore/Library/Models.swift`
+- `Sources/ZennoxCore/Local/FileAccess.swift`
+- `Sources/ZennoxCore/Local/LocalLibraryScanner.swift`
+- `Sources/ZennoxCore/Local/SecurityScopedBookmark.swift`
+- `Sources/ZennoxCore/Metadata/AudioMetadata.swift`
+- `Sources/ZennoxCore/Metadata/ByteReader.swift`
+- `Sources/ZennoxCore/Metadata/FLACParser.swift`
+- `Sources/ZennoxCore/Metadata/ID3Parser.swift`
+- `Sources/ZennoxCore/Metadata/MP4Parser.swift`
+- `Sources/ZennoxCore/Metadata/MetadataReader.swift`
+- `Sources/ZennoxCore/Metadata/OggParser.swift`
+- `Sources/ZennoxCore/Metadata/RIFFParsers.swift`
 - `Tests/ZennoxCoreTests/LibraryStoreTests.swift`
+- `Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift`
+- `Tests/ZennoxCoreTests/MP4OggMetadataTests.swift`
+- `Tests/ZennoxCoreTests/MetadataReaderTests.swift`
+- `tools/spike_drive_picker.py`
 
 ## Top external dependencies (by import count)
-`Foundation` 4, `PackageDescription` 1, `XCTest` 1, `ZennoxCore` 1, `SQLite3` 1, `CSQLite` 1, `pathlib` 1, `re` 1, `sqlite3` 1, `sys` 1, `unittest` 1
+`Foundation` 15, `XCTest` 4, `ZennoxCore` 4, `urllib` 4, `sys` 3, `pathlib` 2, `unittest` 2, `base64` 2, `hashlib` 2, `os` 2, `json` 2, `PackageDescription` 1, `SQLite3` 1, `CSQLite` 1, `spike_drive_picker` 1, `tempfile` 1, `argparse` 1, `glob` 1, `http` 1, `secrets` 1, `time` 1, `webbrowser` 1, `re` 1, `sqlite3` 1

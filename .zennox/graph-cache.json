@@ -16,42 +16,195 @@
     "loc": 114,
     "dom": false
   },
+  "Tests/ZennoxCoreTests/MP4OggMetadataTests.swift": {
+    "h": "ed5ac75133379c15",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 179,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/LocalLibraryScannerTests.swift": {
+    "h": "b44b98285dbbdc90",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 165,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/MetadataReaderTests.swift": {
+    "h": "2d2cc87615f518fd",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 241,
+    "dom": false
+  },
   "Sources/ZennoxCore/Database/Schema.swift": {
-    "h": "7b8ee03a57d47bf5",
+    "h": "a396a4f49a3b115a",
     "imports": [
       "Foundation"
     ],
-    "loc": 114,
+    "loc": 135,
     "dom": false
   },
   "Sources/ZennoxCore/Database/SQLiteDatabase.swift": {
-    "h": "b16d7234fe3346f6",
+    "h": "273ca732c79e155d",
     "imports": [
       "Foundation",
       "SQLite3",
       "CSQLite"
     ],
-    "loc": 133,
+    "loc": 152,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Local/SecurityScopedBookmark.swift": {
+    "h": "59e319b5426fcfdf",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 39,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Local/FileAccess.swift": {
+    "h": "bbad318c35899a7a",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 83,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Local/LocalLibraryScanner.swift": {
+    "h": "2d4c1108ebc10e44",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 104,
     "dom": false
   },
   "Sources/ZennoxCore/Library/LibraryStore.swift": {
-    "h": "6346eb77761857cd",
+    "h": "3b592ee302bee052",
     "imports": [
       "Foundation"
     ],
-    "loc": 168,
+    "loc": 251,
     "dom": false
   },
   "Sources/ZennoxCore/Library/Models.swift": {
-    "h": "74583f322b7f3226",
+    "h": "9e6d14e37880f9d7",
     "imports": [
       "Foundation"
     ],
-    "loc": 70,
+    "loc": 108,
     "dom": false
   },
-  "tests/schema_test.py": {
-    "h": "1c19b7010b1f44f1",
+  "Sources/ZennoxCore/Metadata/OggParser.swift": {
+    "h": "290a2fc827c3e3f3",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 98,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/AudioMetadata.swift": {
+    "h": "99c36942124d95a7",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 66,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/ID3Parser.swift": {
+    "h": "857c6898694e1fa4",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 125,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/RIFFParsers.swift": {
+    "h": "1f182943878aa33f",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 89,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/MP4Parser.swift": {
+    "h": "624f526e1bff8c8d",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 221,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/ByteReader.swift": {
+    "h": "9e072fc0737e24ae",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 67,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/MetadataReader.swift": {
+    "h": "99e2dd3d998cda2c",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 32,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Metadata/FLACParser.swift": {
+    "h": "bede9fe5d8ec3706",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 61,
+    "dom": false
+  },
+  "tools/test_spike_drive_picker.py": {
+    "h": "1221bfe9a8677188",
+    "imports": [
+      "pathlib",
+      "sys",
+      "unittest",
+      "urllib.parse",
+      "base64",
+      "hashlib",
+      "spike_drive_picker",
+      "tempfile",
+      "os",
+      "json"
+    ],
+    "loc": 53,
+    "dom": false
+  },
+  "tools/spike_drive_picker.py": {
+    "h": "e9877c6bfd5fa45a",
+    "imports": [
+      "argparse",
+      "base64",
+      "glob",
+      "hashlib",
+      "http.server",
+      "json",
+      "os",
+      "secrets",
+      "sys",
+      "time",
+      "urllib.error",
+      "urllib.parse",
+      "urllib.request",
+      "webbrowser"
+    ],
+    "loc": 216,
+    "dom": false
+  },
+  "tools/schema_test.py": {
+    "h": "a1b42f8252dda5a1",
     "imports": [
       "pathlib",
       "re",
@@ -59,7 +212,7 @@
       "sys",
       "unittest"
     ],
-    "loc": 64,
+    "loc": 85,
     "dom": false
   }
 }

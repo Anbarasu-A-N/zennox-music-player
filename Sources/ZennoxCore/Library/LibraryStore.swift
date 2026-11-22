@@ -157,6 +157,89 @@ public final class LibraryStore {
         try db.run("DELETE FROM playlist WHERE id = ?;", [.int(playlist.rawValue)])
     }
 
+    // MARK: Local roots
+
+    /// Adds (or re-grants) a folder/file root. Re-adding the same path keeps its tracks.
+    public func addRoot(source: SourceID, kind: RootKind, displayPath: String, accessToken: String?) throws -> RootID {
+        let rows = try db.query("""
+            INSERT INTO library_root (source_id, kind, display_path, access_token, status, added_at)
+            VALUES (?, ?, ?, ?, 'ok', ?)
+            ON CONFLICT (source_id, display_path) DO UPDATE SET access_token = excluded.access_token, status = 'ok'
+            RETURNING id;
+            """, [.int(source.rawValue), .text(kind.rawValue), .text(displayPath), Self.opt(accessToken), .int(now())])
+        guard let id = rows.first?.int("id") else { throw LibraryError.notFound }
+        return RootID(rawValue: id)
+    }
+
+    public func roots(in source: SourceID) throws -> [LibraryRoot] {
+        try db.query("SELECT id, kind, display_path, access_token, status FROM library_root WHERE source_id = ? ORDER BY display_path;",
+                     [.int(source.rawValue)]).compactMap { row in
+            guard let id = row.int("id"), let kind = RootKind(rawValue: row.text("kind") ?? ""),
+                  let path = row.text("display_path") else { return nil }
+            return LibraryRoot(id: RootID(rawValue: id), kind: kind, displayPath: path,
+                               accessToken: row.text("access_token"),
+                               status: RootStatus(rawValue: row.text("status") ?? "") ?? .ok)
+        }
+    }
+
+    /// Removes the root and its library entries (and their favorites/playlist rows). Files are untouched.
+    public func removeRoot(_ root: RootID) throws {
+        try db.run("DELETE FROM library_root WHERE id = ?;", [.int(root.rawValue)])
+    }
+
+    /// Marks a root reachable or not; when unreachable, its tracks become `inaccessible` (not deleted).
+    public func setRootStatus(_ status: RootStatus, for root: RootID, scannedAt: Int64? = nil) throws {
+        try db.transaction {
+            try db.run("UPDATE library_root SET status = ?, last_scan_at = coalesce(?, last_scan_at) WHERE id = ?;",
+                       [.text(status.rawValue), Self.opt(scannedAt), .int(root.rawValue)])
+            if status == .inaccessible {
+                try db.run("UPDATE track SET status = 'inaccessible', updated_at = ? WHERE root_id = ? AND status = 'ok';",
+                           [.int(now()), .int(root.rawValue)])
+            }
+        }
+    }
+
+    public func knownFiles(in root: RootID) throws -> [KnownFile] {
+        try db.query("""
+            SELECT id, external_id, path, file_identity, file_size, file_modified, status
+            FROM track WHERE root_id = ?;
+            """, [.int(root.rawValue)]).compactMap { row in
+            guard let id = row.int("id"), let external = row.text("external_id") else { return nil }
+            return KnownFile(trackID: TrackID(rawValue: id), externalID: external, path: row.text("path"),
+                             identity: row.text("file_identity"), size: row.int("file_size"),
+                             modified: row.int("file_modified"),
+                             status: TrackStatus(rawValue: row.text("status") ?? "") ?? .ok)
+        }
+    }
+
+    /// Inserts/refreshes a local track and records which root and file it came from.
+    public func upsertLocalTrack(_ input: TrackInput, source: SourceID, root: RootID,
+                                 identity: String?, modified: Int64) throws -> TrackID {
+        try db.transaction {
+            let id = try upsertTrack(input, in: source)
+            try db.run("UPDATE track SET root_id = ?, file_identity = ?, file_modified = ? WHERE id = ?;",
+                       [.int(root.rawValue), Self.opt(identity), .int(modified), .int(id.rawValue)])
+            return id
+        }
+    }
+
+    /// A file was renamed or moved but its content is unchanged: update where it lives, keep everything else.
+    public func updateLocation(_ track: TrackID, path: String, identity: String?, modified: Int64) throws {
+        try db.run("""
+            UPDATE track SET path = ?, file_identity = ?, file_modified = ?, status = 'ok', updated_at = ?
+            WHERE id = ?;
+            """, [.text(path), Self.opt(identity), .int(modified), .int(now()), .int(track.rawValue)])
+    }
+
+    public func markMissing(_ tracks: [TrackID]) throws {
+        try db.transaction {
+            for t in tracks { try setStatus(.missing, for: t) }
+        }
+    }
+
+    /// Groups many writes into one transaction (much faster for large scans).
+    public func batch<T>(_ body: () throws -> T) throws -> T { try db.transaction(body) }
+
     private func touch(_ playlist: PlaylistID) throws {
         try db.run("UPDATE playlist SET updated_at = ? WHERE id = ?;", [.int(now()), .int(playlist.rawValue)])
     }

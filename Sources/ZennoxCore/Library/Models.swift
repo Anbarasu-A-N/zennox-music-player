@@ -3,6 +3,31 @@ import Foundation
 public struct SourceID: Hashable, Sendable { public let rawValue: Int64 }
 public struct TrackID: Hashable, Sendable { public let rawValue: Int64 }
 public struct PlaylistID: Hashable, Sendable { public let rawValue: Int64 }
+public struct RootID: Hashable, Sendable { public let rawValue: Int64 }
+
+public enum RootKind: String, Sendable { case folder, file }
+public enum RootStatus: String, Sendable { case ok, inaccessible }
+
+/// A folder or single file the user added. `accessToken` is a platform grant
+/// (base64 security-scoped bookmark on Apple, persisted SAF URI on Android).
+public struct LibraryRoot: Equatable, Sendable {
+    public let id: RootID
+    public let kind: RootKind
+    public let displayPath: String
+    public let accessToken: String?
+    public let status: RootStatus
+}
+
+/// What the library last recorded about a local file, for matching during a rescan.
+public struct KnownFile: Equatable, Sendable {
+    public let trackID: TrackID
+    public let externalID: String
+    public let path: String?
+    public let identity: String?
+    public let size: Int64?
+    public let modified: Int64?
+    public let status: TrackStatus
+}
 
 public enum SourceKind: String, Sendable {
     case local

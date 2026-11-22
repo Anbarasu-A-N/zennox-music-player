@@ -3,9 +3,9 @@ import Foundation
 /// Versioned, forward-only migrations. tools/schema_test.py extracts the SQL between the
 /// BEGIN/END markers and runs it with Python's sqlite3, so keep the markers intact.
 public enum Schema {
-    public static let latestVersion = 1
+    public static let latestVersion = 2
 
-    static let migrations: [(version: Int, sql: String)] = [(1, v1)]
+    static let migrations: [(version: Int, sql: String)] = [(1, v1), (2, v2)]
 
     // BEGIN SQL v1
     static let v1 = """
@@ -95,6 +95,27 @@ public enum Schema {
     );
     """
     // END SQL v1
+
+    // v2: local library roots (folders/files the user added) and file identity for rename/move detection.
+    // BEGIN SQL v2
+    static let v2 = """
+    CREATE TABLE library_root (
+        id            INTEGER PRIMARY KEY,
+        source_id     INTEGER NOT NULL REFERENCES source(id) ON DELETE CASCADE,
+        kind          TEXT    NOT NULL CHECK (kind IN ('folder', 'file')),
+        display_path  TEXT    NOT NULL,
+        access_token  TEXT,
+        status        TEXT    NOT NULL DEFAULT 'ok' CHECK (status IN ('ok', 'inaccessible')),
+        added_at      INTEGER NOT NULL,
+        last_scan_at  INTEGER,
+        UNIQUE (source_id, display_path)
+    );
+    ALTER TABLE track ADD COLUMN root_id INTEGER REFERENCES library_root(id) ON DELETE CASCADE;
+    ALTER TABLE track ADD COLUMN file_identity TEXT;
+    ALTER TABLE track ADD COLUMN file_modified INTEGER;
+    CREATE INDEX track_root ON track(root_id);
+    """
+    // END SQL v2
 
     /// Applies pending migrations, each in its own transaction. Refuses to open a database
     /// written by a newer app version rather than corrupting it.
