@@ -59,7 +59,7 @@ public struct RootView: View {
     }
 
     private func row(_ section: LibrarySection) -> some View {
-        Label(section.title, systemImage: section.symbol).tag(Optional(section))
+        Label(section.title, systemImage: section.symbol).tag(section)  // non-optional: List(selection: Binding<T?>) matches tags of T
     }
 
     @ViewBuilder private var detail: some View {

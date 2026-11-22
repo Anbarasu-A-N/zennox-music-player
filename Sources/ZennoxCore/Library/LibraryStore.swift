@@ -271,6 +271,66 @@ public final class LibraryStore {
         }
     }
 
+    /// The folder moved or was renamed (its bookmark now resolves elsewhere): record where it is now.
+    public func updateRoot(_ root: RootID, displayPath: String, accessToken: String?) throws {
+        try db.run("UPDATE library_root SET display_path = ?, access_token = coalesce(?, access_token), status = 'ok' WHERE id = ?;",
+                   [.text(displayPath), Self.opt(accessToken), .int(root.rawValue)])
+    }
+
+    /// Two roots turned out to be the same folder: fold `drop` into `keep`. Tracks for the same file
+    /// are merged (favorites, playlist entries and history carried over); the rest move to `keep`.
+    public func mergeRoot(_ drop: RootID, into keep: RootID) throws {
+        guard drop != keep else { return }
+        try db.transaction {
+            let kept = try knownFiles(in: keep)
+            var byIdentity: [String: TrackID] = [:]
+            var byPath: [String: TrackID] = [:]
+            for k in kept {
+                if let id = k.identity { byIdentity[id] = k.trackID }
+                if let p = k.path { byPath[p] = k.trackID }
+            }
+            for d in try knownFiles(in: drop) {
+                if let target = d.identity.flatMap({ byIdentity[$0] }) ?? d.path.flatMap({ byPath[$0] }) {
+                    try mergeTrack(d.trackID, into: target)
+                } else {
+                    try db.run("UPDATE track SET root_id = ? WHERE id = ?;", [.int(keep.rawValue), .int(d.trackID.rawValue)])
+                }
+            }
+            try db.run("DELETE FROM library_root WHERE id = ?;", [.int(drop.rawValue)])
+        }
+    }
+
+    /// Replaces every reference to `drop` with `keep`, then removes `drop`'s library row (never a file).
+    public func mergeTrack(_ drop: TrackID, into keep: TrackID) throws {
+        guard drop != keep else { return }
+        let d = SQLValue.int(drop.rawValue), k = SQLValue.int(keep.rawValue)
+        try db.transaction {
+            try db.run("INSERT INTO favorite (track_id, created_at) SELECT ?, created_at FROM favorite WHERE track_id = ? ON CONFLICT (track_id) DO NOTHING;", [k, d])
+            try db.run("UPDATE playlist_track SET track_id = ? WHERE track_id = ?;", [k, d])
+            try db.run("UPDATE playback_history SET track_id = ? WHERE track_id = ?;", [k, d])
+            try db.run("DELETE FROM track WHERE id = ?;", [d])
+        }
+    }
+
+    /// A track of this source in another root that has the same file identity.
+    public func track(withIdentity identity: String, source: SourceID, outside root: RootID) throws -> KnownFile? {
+        try db.query("""
+            SELECT id, external_id, path, file_identity, file_size, file_modified, status FROM track
+            WHERE source_id = ? AND file_identity = ? AND (root_id IS NULL OR root_id <> ?) LIMIT 1;
+            """, [.int(source.rawValue), .text(identity), .int(root.rawValue)]).first.flatMap { row -> KnownFile? in
+            guard let id = row.int("id"), let external = row.text("external_id") else { return nil }
+            return KnownFile(trackID: TrackID(rawValue: id), externalID: external, path: row.text("path"),
+                             identity: row.text("file_identity"), size: row.int("file_size"),
+                             modified: row.int("file_modified"), status: TrackStatus(rawValue: row.text("status") ?? "") ?? .ok)
+        }
+    }
+
+    /// Moves a track to another root (a file moved between two added folders), keeping its references.
+    public func adoptTrack(_ track: TrackID, into root: RootID, path: String, identity: String?, modified: Int64) throws {
+        try db.run("UPDATE track SET root_id = ? WHERE id = ?;", [.int(root.rawValue), .int(track.rawValue)])
+        try updateLocation(track, path: path, identity: identity, modified: modified)
+    }
+
     /// Groups many writes into one transaction (much faster for large scans).
     public func batch<T>(_ body: () throws -> T) throws -> T { try db.transaction(body) }
 

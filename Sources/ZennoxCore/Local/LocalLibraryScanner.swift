@@ -7,6 +7,7 @@ public struct ScanReport: Equatable, Sendable {
     public var unchanged = 0
     public var missing = 0
     public var skipped = 0          // audio extension but not readable as audio
+    public var overlapping = 0      // already in the library through another added folder
     public var rootInaccessible = false
 }
 
@@ -67,6 +68,16 @@ public final class LocalLibraryScanner {
                         } else {
                             try store.setStatus(.inaccessible, for: k.trackID)
                             report.skipped += 1
+                        }
+                    } else if let identity = entry.identity,
+                              let other = try store.track(withIdentity: identity, source: source, outside: root) {
+                        if other.status == .ok {
+                            report.overlapping += 1  // overlapping folders: never list one file twice
+                        } else {
+                            // File moved from another added folder: keep its favorites and playlists.
+                            try store.adoptTrack(other.trackID, into: root, path: entry.path, identity: identity, modified: entry.modified)
+                            seen.insert(other.trackID)
+                            report.moved += 1
                         }
                     } else if let input = readTrack(entry, externalID: makeExternalID()) {
                         let id = try store.upsertLocalTrack(input, source: source, root: root, identity: entry.identity, modified: entry.modified)
