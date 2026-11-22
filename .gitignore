@@ -10,3 +10,5 @@ DerivedData/
 *.jks
 GoogleService-Info.plist
 Secrets.xcconfig
+client_secret*.json
+spike-results/

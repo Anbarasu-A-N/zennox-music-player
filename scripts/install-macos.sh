@@ -75,7 +75,7 @@ ok "Installed to $DEST"
 open "$DEST"
 echo -e "\n${GREEN}${BOLD}  ✓ ${APP_NAME} ${VERSION} installed.${NC}\n"
 echo -e "  Uninstall:  ${YELLOW}rm -rf \"$DEST\"${NC}"
-echo -e "  Remove data too:  ${YELLOW}rm -rf ~/Library/Containers/com.zennox.musicplayer ~/Library/Application\\ Support/Zennox${NC}\n"
+echo -e "  Remove data too:  ${YELLOW}rm -rf ~/Library/Containers/com.anbarasu.zennox.music ~/Library/Application\\ Support/Zennox${NC}\n"
 }
 
 main "$@"

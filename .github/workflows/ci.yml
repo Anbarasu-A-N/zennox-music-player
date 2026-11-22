@@ -10,6 +10,7 @@ jobs:
       - name: Paths must not collide on case-insensitive filesystems (macOS, Windows)
         run: tools/check_case_collisions.sh
       - run: python3 tools/schema_test.py
+      - run: python3 tools/test_spike_drive_picker.py
 
   core-macos:
     runs-on: macos-15
