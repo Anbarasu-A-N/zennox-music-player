@@ -55,6 +55,19 @@ public struct TrackInput: Sendable {
     }
 }
 
+extension TrackInput {
+    /// Builds a library entry from parsed metadata. Title falls back to the file name without extension.
+    public init(externalID: String, path: String? = nil, fileName: String, metadata m: AudioMetadata,
+                fileSize: Int64? = nil, mimeType: String? = nil) {
+        let base = (fileName as NSString).deletingPathExtension
+        self.init(externalID: externalID, path: path, title: m.title ?? (base.isEmpty ? fileName : base),
+                  artist: m.artist, album: m.album, albumArtist: m.albumArtist,
+                  trackNumber: m.trackNumber, discNumber: m.discNumber, durationMs: m.durationMs,
+                  codec: m.codec, sampleRate: m.sampleRate, bitDepth: m.bitDepth, channels: m.channels,
+                  fileSize: fileSize, mimeType: mimeType)
+    }
+}
+
 public struct TrackSummary: Equatable, Sendable {
     public let id: TrackID
     public let title: String

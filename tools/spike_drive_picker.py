@@ -9,7 +9,7 @@ Answers, on your real account:
 Stdlib only. Tokens stay in memory, are never printed or written, and are revoked at the end.
 Setup: docs/google-cloud-setup.md.   Run:  python3 tools/spike_drive_picker.py --client-json ~/Downloads/client_secret_XXX.json
 """
-import argparse, base64, hashlib, http.server, json, os, secrets, sys, time, urllib.error, urllib.parse, urllib.request, webbrowser
+import argparse, base64, glob, hashlib, http.server, json, os, secrets, sys, time, urllib.error, urllib.parse, urllib.request, webbrowser
 
 AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth"
 TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -63,6 +63,33 @@ def magic_kind(head: bytes):
     return None
 
 
+def find_client_json(given, downloads="~/Downloads"):
+    """Resolves the OAuth client file: the given path, or the only client_secret_*.json in Downloads."""
+    if given and "XXXX" not in given:
+        path = os.path.expanduser(given)
+        if not os.path.isfile(path):
+            raise SystemExit(f"File not found: {path}\nList candidates with:  ls ~/Downloads/client_secret_*.json")
+        return path
+    found = sorted(glob.glob(os.path.join(os.path.expanduser(downloads), "client_secret_*.json")))
+    if len(found) == 1:
+        print(f"Using {found[0]}")
+        return found[0]
+    if not found:
+        raise SystemExit("No client_secret_*.json in ~/Downloads. Download it from Google Cloud → "
+                         "Google Auth platform → Clients → your Desktop client → Download JSON.")
+    raise SystemExit("Several client files in ~/Downloads; pass one with --client-json:\n  " + "\n  ".join(found))
+
+
+def load_client(given):
+    with open(find_client_json(given)) as fh:
+        data = json.load(fh)
+    if "installed" not in data:
+        kind = next(iter(data), "unknown")
+        raise SystemExit(f"This client is type '{kind}', not 'Desktop app'. Create a Desktop app client "
+                         "(docs/google-cloud-setup.md, section 3) and download its JSON.")
+    return data["installed"]["client_id"], data["installed"].get("client_secret", "")
+
+
 def loopback_server():
     result = {}
 
@@ -92,20 +119,16 @@ def http_json(method, url, token=None, data=None, headers=None):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--client-json", help="OAuth client JSON downloaded from Google Cloud (Desktop app type)")
+    ap.add_argument("--client-json", help="OAuth client JSON (Desktop app). Default: the only client_secret_*.json in ~/Downloads")
     ap.add_argument("--audio-only-filter", action="store_true", help="pass audio MIME types to the Picker filter")
     ap.add_argument("--show-names", action="store_true", help="print file names (off by default for privacy)")
     ap.add_argument("--keep-token", action="store_true", help="do not revoke the grant at the end")
     args = ap.parse_args()
 
-    if args.client_json:
-        cfg = json.load(open(os.path.expanduser(args.client_json)))["installed"]
-        client_id, client_secret = cfg["client_id"], cfg.get("client_secret", "")
-    else:
-        client_id = os.environ.get("ZENNOX_GOOGLE_CLIENT_ID", "")
-        client_secret = os.environ.get("ZENNOX_GOOGLE_CLIENT_SECRET", "")
-    if not client_id:
-        sys.exit("Need --client-json or ZENNOX_GOOGLE_CLIENT_ID (see docs/google-cloud-setup.md)")
+    client_id = os.environ.get("ZENNOX_GOOGLE_CLIENT_ID", "")
+    client_secret = os.environ.get("ZENNOX_GOOGLE_CLIENT_SECRET", "")
+    if args.client_json or not client_id:
+        client_id, client_secret = load_client(args.client_json)
 
     server, port, result = loopback_server()
     redirect_uri = f"http://127.0.0.1:{port}/callback"

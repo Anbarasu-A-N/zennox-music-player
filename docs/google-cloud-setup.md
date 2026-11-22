@@ -25,7 +25,8 @@ services, no security assessment. Do this once; ~10 minutes.
 
 ## 4. Run spike S1
 ```bash
-python3 tools/spike_drive_picker.py --client-json ~/Downloads/client_secret_XXXX.json
+python3 tools/spike_drive_picker.py   # uses the client_secret_*.json in ~/Downloads
+# or name it: python3 tools/spike_drive_picker.py --client-json ~/Downloads/client_secret_<your-id>.json
 ```
 In the browser: sign in with a **test user**, accept, then in the Picker select 2–3 audio files
 **and** one folder that contains music. Paste the printed JSON back into the chat.
