@@ -1,0 +1,12 @@
+.build/
+.swiftpm/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.zennox/env.json
+*.p12
+*.mobileprovision
+*.keystore
+*.jks
+GoogleService-Info.plist
+Secrets.xcconfig

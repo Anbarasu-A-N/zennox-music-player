@@ -1,0 +1,65 @@
+{
+  "Package.swift": {
+    "h": "50bda1d668f1a860",
+    "imports": [
+      "PackageDescription"
+    ],
+    "loc": 24,
+    "dom": false
+  },
+  "Tests/ZennoxCoreTests/LibraryStoreTests.swift": {
+    "h": "6df799777b1e8bff",
+    "imports": [
+      "XCTest",
+      "ZennoxCore"
+    ],
+    "loc": 114,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Database/Schema.swift": {
+    "h": "7b8ee03a57d47bf5",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 114,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Database/SQLiteDatabase.swift": {
+    "h": "b16d7234fe3346f6",
+    "imports": [
+      "Foundation",
+      "SQLite3",
+      "CSQLite"
+    ],
+    "loc": 133,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/LibraryStore.swift": {
+    "h": "6346eb77761857cd",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 168,
+    "dom": false
+  },
+  "Sources/ZennoxCore/Library/Models.swift": {
+    "h": "74583f322b7f3226",
+    "imports": [
+      "Foundation"
+    ],
+    "loc": 70,
+    "dom": false
+  },
+  "tests/schema_test.py": {
+    "h": "1c19b7010b1f44f1",
+    "imports": [
+      "pathlib",
+      "re",
+      "sqlite3",
+      "sys",
+      "unittest"
+    ],
+    "loc": 64,
+    "dom": false
+  }
+}

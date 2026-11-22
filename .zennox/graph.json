@@ -1,0 +1,108 @@
+{
+  "root": "/home/claude/music-player",
+  "files": 7,
+  "edges": 0,
+  "languages": {
+    "swift": 6,
+    "py": 1
+  },
+  "nodes": [
+    {
+      "id": "Package.swift",
+      "lang": "swift",
+      "loc": 24,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Database/SQLiteDatabase.swift",
+      "lang": "swift",
+      "loc": 133,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Database/Schema.swift",
+      "lang": "swift",
+      "loc": 114,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Library/LibraryStore.swift",
+      "lang": "swift",
+      "loc": 168,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Sources/ZennoxCore/Library/Models.swift",
+      "lang": "swift",
+      "loc": 70,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "Tests/ZennoxCoreTests/LibraryStoreTests.swift",
+      "lang": "swift",
+      "loc": 114,
+      "in": 0,
+      "out": 0
+    },
+    {
+      "id": "tests/schema_test.py",
+      "lang": "py",
+      "loc": 64,
+      "in": 0,
+      "out": 0
+    }
+  ],
+  "adjacency": {},
+  "external": {
+    "Foundation": 4,
+    "PackageDescription": 1,
+    "XCTest": 1,
+    "ZennoxCore": 1,
+    "SQLite3": 1,
+    "CSQLite": 1,
+    "pathlib": 1,
+    "re": 1,
+    "sqlite3": 1,
+    "sys": 1,
+    "unittest": 1
+  },
+  "god_nodes": [],
+  "hubs": [],
+  "cycles": [],
+  "orphans": [
+    "Package.swift",
+    "Sources/ZennoxCore/Database/SQLiteDatabase.swift",
+    "Sources/ZennoxCore/Database/Schema.swift",
+    "Sources/ZennoxCore/Library/LibraryStore.swift",
+    "Sources/ZennoxCore/Library/Models.swift",
+    "Tests/ZennoxCoreTests/LibraryStoreTests.swift"
+  ],
+  "clusters": {
+    "Sources": {
+      "files": 4,
+      "intra": 0,
+      "inter": 0
+    },
+    "(root)": {
+      "files": 1,
+      "intra": 0,
+      "inter": 0
+    },
+    "Tests": {
+      "files": 1,
+      "intra": 0,
+      "inter": 0
+    },
+    "tests": {
+      "files": 1,
+      "intra": 0,
+      "inter": 0
+    }
+  },
+  "layer_violations": []
+}
