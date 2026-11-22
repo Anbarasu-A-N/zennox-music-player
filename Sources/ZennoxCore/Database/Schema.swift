@@ -3,9 +3,9 @@ import Foundation
 /// Versioned, forward-only migrations. tools/schema_test.py extracts the SQL between the
 /// BEGIN/END markers and runs it with Python's sqlite3, so keep the markers intact.
 public enum Schema {
-    public static let latestVersion = 3
+    public static let latestVersion = 4
 
-    static let migrations: [(version: Int, sql: String)] = [(1, v1), (2, v2), (3, v3)]
+    static let migrations: [(version: Int, sql: String)] = [(1, v1), (2, v2), (3, v3), (4, v4)]
 
     // BEGIN SQL v1
     static let v1 = """
@@ -145,6 +145,20 @@ public enum Schema {
     CREATE INDEX track_title ON track(title COLLATE NOCASE);
     """
     // END SQL v3
+
+    // v4: pairs the user marked "not duplicates", so detection never suggests them again.
+    // BEGIN SQL v4
+    static let v4 = """
+    CREATE TABLE duplicate_dismissal (
+        track_a     INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE,
+        track_b     INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE,
+        created_at  INTEGER NOT NULL,
+        PRIMARY KEY (track_a, track_b),
+        CHECK (track_a < track_b)
+    );
+    CREATE INDEX track_content_hash ON track(content_hash);
+    """
+    // END SQL v4
 
     /// Applies pending migrations, each in its own transaction. Refuses to open a database
     /// written by a newer app version rather than corrupting it.

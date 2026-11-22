@@ -243,9 +243,16 @@ public final class LibraryStore {
     public func upsertLocalTrack(_ input: TrackInput, source: SourceID, root: RootID,
                                  identity: String?, modified: Int64) throws -> TrackID {
         try db.transaction {
+            // A content hash describes the old bytes: keep it only if size and mtime are both unchanged.
+            let before = try db.query("SELECT file_size, file_modified FROM track WHERE source_id = ? AND external_id = ?;",
+                                      [.int(source.rawValue), .text(input.externalID)]).first
+            let unchanged = before != nil && before?.int("file_size") == input.fileSize && before?.int("file_modified") == modified
             let id = try upsertTrack(input, in: source)
-            try db.run("UPDATE track SET root_id = ?, file_identity = ?, file_modified = ? WHERE id = ?;",
-                       [.int(root.rawValue), Self.opt(identity), .int(modified), .int(id.rawValue)])
+            try db.run("""
+                UPDATE track SET root_id = ?, file_identity = ?, file_modified = ?,
+                    content_hash = CASE WHEN ? = 1 THEN content_hash ELSE NULL END
+                WHERE id = ?;
+                """, [.int(root.rawValue), Self.opt(identity), .int(modified), .int(unchanged ? 1 : 0), .int(id.rawValue)])
             return id
         }
     }

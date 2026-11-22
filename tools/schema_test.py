@@ -6,7 +6,7 @@ SWIFT = pathlib.Path(__file__).resolve().parents[1] / "Sources/ZennoxCore/Databa
 def migration(n):
     return re.search(r'// BEGIN SQL v%d\s*static let v%d = """\n(.*?)\n\s*"""\s*// END SQL v%d' % (n, n, n), SWIFT.read_text(), re.S).group(1)
 
-SQL = migration(1) + "\n" + migration(2) + "\n" + migration(3)
+SQL = migration(1) + "\n" + migration(2) + "\n" + migration(3) + "\n" + migration(4)
 
 class SchemaV1(unittest.TestCase):
     def setUp(self):
@@ -97,6 +97,20 @@ class SearchV3(unittest.TestCase):
         db.execute("INSERT INTO track (source_id, external_id, title, codec, added_at, updated_at) VALUES (1,'x','Old Song','mp3',0,0)")
         db.executescript(migration(3))
         self.assertEqual(db.execute("SELECT count(*) FROM track_fts WHERE track_fts MATCH '\"old\"*'").fetchone()[0], 1)
+
+class DismissalV4(unittest.TestCase):
+    def test_pairs_are_ordered_unique_and_cascade(self):
+        db = sqlite3.connect(":memory:", isolation_level=None)
+        db.execute("PRAGMA foreign_keys = ON")
+        db.executescript(SQL)
+        db.execute("INSERT INTO source (kind, display_name, created_at) VALUES ('local','Mac',0)")
+        for e in ("a", "b"):
+            db.execute("INSERT INTO track (source_id, external_id, title, codec, added_at, updated_at) VALUES (1,?,'t','mp3',0,0)", (e,))
+        db.execute("INSERT INTO duplicate_dismissal VALUES (1, 2, 0)")
+        with self.assertRaises(sqlite3.IntegrityError): db.execute("INSERT INTO duplicate_dismissal VALUES (2, 1, 0)")
+        with self.assertRaises(sqlite3.IntegrityError): db.execute("INSERT INTO duplicate_dismissal VALUES (1, 2, 0)")
+        db.execute("DELETE FROM track WHERE id = 2")
+        self.assertEqual(db.execute("SELECT count(*) FROM duplicate_dismissal").fetchone()[0], 0)
 
 class MigrationV1toV2(unittest.TestCase):
     def test_populated_v1_keeps_data_and_gains_roots(self):
