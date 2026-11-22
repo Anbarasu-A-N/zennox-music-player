@@ -30,14 +30,17 @@ public struct URLSessionTransport: HTTPTransport {
 
     public func send(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
         guard request.url?.scheme == "https" else { throw OAuthError.malformedResponse }  // HTTPS only
-        let (data, response): (Data, URLResponse) = try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(Data, HTTPURLResponse), Error>) in
             session.dataTask(with: request) { data, response, error in
-                if let error { continuation.resume(throwing: error); return }
-                continuation.resume(returning: (data ?? Data(), response ?? URLResponse()))
+                if let error {
+                    continuation.resume(throwing: error)
+                } else if let http = response as? HTTPURLResponse {
+                    continuation.resume(returning: (data ?? Data(), http))
+                } else {
+                    continuation.resume(throwing: OAuthError.malformedResponse)
+                }
             }.resume()
         }
-        guard let http = response as? HTTPURLResponse else { throw OAuthError.malformedResponse }
-        return (data, http)
     }
 }
 
@@ -85,7 +88,7 @@ public actor GoogleTokenManager {
         let task = Task { () throws -> String in
             let (data, response) = try await self.transport.send(GoogleOAuth.refreshRequest(self.config, refreshToken: refresh))
             let token = try GoogleOAuth.parseTokenResponse(data, status: response.statusCode)
-            return try await self.acceptRefreshed(token)
+            return try self.acceptRefreshed(token)
         }
         refreshTask = task
         defer { refreshTask = nil }

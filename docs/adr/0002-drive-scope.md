@@ -39,3 +39,9 @@ Picked one audio/mpeg file (10.4 MB). `files.get?alt=media` with `Range: bytes=0
 `Content-Range: bytes 0-15/10434621`, ID3 magic. Mid-file range (64 KB at 50%) → 206.
 Conclusion: picked files are readable; HTTP Range works for header reads and seeking.
 Not yet measured: seek latency budget (< 2 s at 20 Mbps) — measured in the app in A2.
+
+## Evidence (S1 run 3, 2026-11-22): account identity
+`GET /drive/v3/about?fields=user(permissionId,displayName,emailAddress)` with drive.file only
+→ 200, permissionId and emailAddress present. Decision: Drive source `account_id` = permissionId
+(stable per Google account); email shown in Settings so users can tell accounts apart.
+No openid/email scopes needed (the Picker flow forbids combining them anyway).

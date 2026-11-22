@@ -138,9 +138,8 @@ def main():
              "audio/ogg", "audio/opus", "audio/wav", "audio/x-wav", "audio/aiff", "audio/x-aiff", FOLDER_MIME] if args.audio_only_filter else None
     url = build_auth_url(client_id, redirect_uri, state, challenge, True, mimes)
 
-    print("\nOpening Google in your browser. In the Picker, select:\n"
-          "  • 2–3 audio files, AND\n  • 1 folder that contains music (not opened, just selected)\n"
-          "then click Select/Insert.\n")
+    print("\nOpening Google in your browser. In the Picker, open your music folder and\n"
+          "Shift-click or ⌘/Ctrl-click a few songs, then click Select.\n")
     webbrowser.open(url)
     deadline = time.time() + 300
     while "path" not in result and time.time() < deadline:
