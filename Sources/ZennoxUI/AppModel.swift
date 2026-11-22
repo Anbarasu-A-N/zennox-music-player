@@ -161,7 +161,7 @@ public final class AppModel {
         do {
             let store = try LibraryStore(database: SQLiteDatabase(path: databasePath))
             let scanner = LocalLibraryScanner(store: store)
-            var total = ScanReport()
+            var added = 0, updated = 0, moved = 0, missing = 0
             for root in targets {
                 guard let token = root.accessToken else {
                     try store.setRootStatus(.inaccessible, for: root.id)
@@ -174,20 +174,20 @@ public final class AppModel {
                     if let refreshed {
                         _ = try store.addRoot(source: source, kind: root.kind, displayPath: root.displayPath, accessToken: refreshed)
                     }
-                    total.added += report.added
-                    total.updated += report.updated
-                    total.moved += report.moved
-                    total.missing += report.missing
+                    added += report.added
+                    updated += report.updated
+                    moved += report.moved
+                    missing += report.missing
                 } catch {
                     try store.setRootStatus(.inaccessible, for: root.id)
                 }
             }
             try DuplicateDetector.detect(in: store)
             var parts: [String] = []
-            if total.added > 0 { parts.append("\(total.added) added") }
-            if total.updated > 0 { parts.append("\(total.updated) updated") }
-            if total.moved > 0 { parts.append("\(total.moved) moved") }
-            if total.missing > 0 { parts.append("\(total.missing) missing") }
+            if added > 0 { parts.append("\(added) added") }
+            if updated > 0 { parts.append("\(updated) updated") }
+            if moved > 0 { parts.append("\(moved) moved") }
+            if missing > 0 { parts.append("\(missing) missing") }
             return parts.isEmpty ? "Library is up to date" : parts.joined(separator: " · ")
         } catch {
             return "Scan failed: \(error.localizedDescription)"
