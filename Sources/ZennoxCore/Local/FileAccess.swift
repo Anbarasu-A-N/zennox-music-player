@@ -1,4 +1,11 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Android)
+import Android
+#endif
 
 public struct FileEntry: Equatable, Sendable {
     public let path: String
@@ -29,8 +36,22 @@ public enum FileAccessError: Error, Equatable {
 public struct LocalFileSystem: FileAccess {
     public init() {}
 
-    public func listFiles(under root: String) throws -> [FileEntry] {
+    /// One canonical spelling per file (symlinks resolved, e.g. macOS /var → /private/var), so paths
+    /// stored in the library always compare equal to what the next scan reports. Uses realpath(3):
+    /// Foundation's resolvingSymlinksInPath strips "/private" on macOS and would reintroduce the mismatch.
+    public static func canonical(_ path: String) -> String {
+        #if canImport(Darwin) || canImport(Glibc) || canImport(Android)
+        guard let resolved = realpath(path, nil) else { return path }
+        defer { free(resolved) }
+        return String(cString: resolved)
+        #else
+        return path
+        #endif
+    }
+
+    public func listFiles(under requestedRoot: String) throws -> [FileEntry] {
         let fm = FileManager.default
+        let root = Self.canonical(requestedRoot)
         var isDirectory: ObjCBool = false
         guard fm.fileExists(atPath: root, isDirectory: &isDirectory) else { throw FileAccessError.notFound(root) }
         if !isDirectory.boolValue { return [try entry(root)] }

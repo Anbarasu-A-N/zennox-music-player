@@ -73,7 +73,7 @@ final class LocalLibraryScannerTests: XCTestCase {
         XCTAssertEqual(r.added, 0)
         XCTAssertEqual(try store.trackCount(), 1)
         XCTAssertTrue(try store.isFavorite(id))
-        XCTAssertEqual(try store.knownFiles(in: root).first?.path, moved.path)
+        XCTAssertEqual(try store.knownFiles(in: root).first?.path, LocalFileSystem.canonical(moved.path))
     }
 
     func testDeletedFileBecomesMissingThenRecovers() throws {
@@ -127,6 +127,23 @@ final class LocalLibraryScannerTests: XCTestCase {
         let again = try store.addRoot(source: source, kind: .folder, displayPath: dir.path, accessToken: "new-grant")
         XCTAssertEqual(again, root)
         XCTAssertEqual(try store.roots(in: source).first?.accessToken, "new-grant")
+    }
+
+    /// Scanning through a symlinked path (macOS: /var → /private/var) stores canonical paths, so a
+    /// rescan through either spelling matches the same tracks.
+    func testSymlinkedRootStoresCanonicalPaths() throws {
+        try write("a.flac", flac(seconds: 10, title: "A"))
+        let link = FileManager.default.temporaryDirectory.appendingPathComponent("zennox-link-\(UUID().uuidString)")
+        try FileManager.default.createSymbolicLink(at: link, withDestinationURL: dir)
+        defer { try? FileManager.default.removeItem(at: link) }
+
+        XCTAssertEqual(try scanner.scan(root: root, path: link.path, source: source).added, 1)
+        let stored = try XCTUnwrap(try store.knownFiles(in: root).first?.path)
+        XCTAssertEqual(stored, LocalFileSystem.canonical(dir.appendingPathComponent("a.flac").path))
+
+        let viaRealPath = try scanner.scan(root: root, path: dir.path, source: source)
+        XCTAssertEqual(viaRealPath.unchanged, 1)
+        XCTAssertEqual(viaRealPath.added + viaRealPath.moved + viaRealPath.missing, 0)
     }
 
     func testLargeFolderBatches() throws {
