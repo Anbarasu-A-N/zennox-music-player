@@ -7,7 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tests/schema_test.py
+      - name: Paths must not collide on case-insensitive filesystems (macOS, Windows)
+        run: tools/check_case_collisions.sh
+      - run: python3 tools/schema_test.py
 
   core-macos:
     runs-on: macos-15

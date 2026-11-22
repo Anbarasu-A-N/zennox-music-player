@@ -1,6 +1,6 @@
 import Foundation
 
-/// Versioned, forward-only migrations. tests/schema_test.py extracts the SQL between the
+/// Versioned, forward-only migrations. tools/schema_test.py extracts the SQL between the
 /// BEGIN/END markers and runs it with Python's sqlite3, so keep the markers intact.
 public enum Schema {
     public static let latestVersion = 1

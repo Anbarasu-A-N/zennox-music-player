@@ -1,5 +1,5 @@
 """Runs the exact v1 schema from Schema.swift against SQLite and checks the library invariants
-that the database itself must enforce. Runs anywhere Python 3 is installed: python3 tests/schema_test.py"""
+that the database itself must enforce. Runs anywhere Python 3 is installed: python3 tools/schema_test.py"""
 import pathlib, re, sqlite3, sys, unittest
 
 SWIFT = pathlib.Path(__file__).resolve().parents[1] / "Sources/ZennoxCore/Database/Schema.swift"
