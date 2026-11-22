@@ -6,6 +6,10 @@ public final class LibraryStore {
     private let db: SQLiteDatabase
     private let now: () -> Int64
 
+    /// For query extensions in this module.
+    var database: SQLiteDatabase { db }
+    func currentTime() -> Int64 { now() }
+
     public init(database: SQLiteDatabase,
                 now: @escaping () -> Int64 = { Int64(Date().timeIntervalSince1970 * 1000) }) throws {
         self.db = database

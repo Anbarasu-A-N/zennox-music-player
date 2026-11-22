@@ -6,7 +6,7 @@ SWIFT = pathlib.Path(__file__).resolve().parents[1] / "Sources/ZennoxCore/Databa
 def migration(n):
     return re.search(r'// BEGIN SQL v%d\s*static let v%d = """\n(.*?)\n\s*"""\s*// END SQL v%d' % (n, n, n), SWIFT.read_text(), re.S).group(1)
 
-SQL = migration(1) + "\n" + migration(2)
+SQL = migration(1) + "\n" + migration(2) + "\n" + migration(3)
 
 class SchemaV1(unittest.TestCase):
     def setUp(self):
@@ -61,6 +61,42 @@ class SchemaV1(unittest.TestCase):
         self.db.execute("UPDATE playlist_track SET position=-position-1 WHERE playlist_id=1 AND position<0")
         rows = self.db.execute("SELECT track_id FROM playlist_track ORDER BY position").fetchall()
         self.assertEqual([r[0] for r in rows], [ids[0], ids[2], ids[3]])
+
+class SearchV3(unittest.TestCase):
+    def setUp(self):
+        self.db = sqlite3.connect(":memory:", isolation_level=None)
+        self.db.execute("PRAGMA foreign_keys = ON")
+        self.db.executescript(SQL)
+        self.db.execute("INSERT INTO source (kind, display_name, created_at) VALUES ('local','Mac',0)")
+
+    def add(self, ext, title, artist=None):
+        return self.db.execute("INSERT INTO track (source_id, external_id, title, artist, codec, added_at, updated_at) "
+                               "VALUES (1, ?, ?, ?, 'mp3', 0, 0) RETURNING id", (ext, title, artist)).fetchone()[0]
+
+    def find(self, q):
+        return [r[0] for r in self.db.execute("SELECT rowid FROM track_fts WHERE track_fts MATCH ? ORDER BY rowid", (q,))]
+
+    def test_accents_case_prefix_and_sync(self):
+        a = self.add("a", "Café del Mar", "José González")
+        self.assertEqual(self.find('"cafe"*'), [a])
+        self.assertEqual(self.find('"gonz"*'), [a])
+        self.db.execute("UPDATE track SET title = 'Sunset' WHERE id = ?", (a,))
+        self.assertEqual(self.find('"cafe"*'), [])
+        self.assertEqual(self.find('"suns"*'), [a])
+        # upsert path (ON CONFLICT DO UPDATE) also fires the update trigger
+        self.db.execute("INSERT INTO track (source_id, external_id, title, codec, added_at, updated_at) VALUES (1,'a','Moonrise','mp3',0,0) "
+                        "ON CONFLICT (source_id, external_id) DO UPDATE SET title = excluded.title")
+        self.assertEqual(self.find('"moon"*'), [a])
+        self.db.execute("DELETE FROM track WHERE id = ?", (a,))
+        self.assertEqual(self.find('"moon"*'), [])
+
+    def test_rebuild_backfills_rows_from_before_v3(self):
+        db = sqlite3.connect(":memory:", isolation_level=None)
+        db.executescript(migration(1) + migration(2))
+        db.execute("INSERT INTO source (kind, display_name, created_at) VALUES ('local','Mac',0)")
+        db.execute("INSERT INTO track (source_id, external_id, title, codec, added_at, updated_at) VALUES (1,'x','Old Song','mp3',0,0)")
+        db.executescript(migration(3))
+        self.assertEqual(db.execute("SELECT count(*) FROM track_fts WHERE track_fts MATCH '\"old\"*'").fetchone()[0], 1)
 
 class MigrationV1toV2(unittest.TestCase):
     def test_populated_v1_keeps_data_and_gains_roots(self):

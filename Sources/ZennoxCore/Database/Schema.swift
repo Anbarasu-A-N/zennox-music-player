@@ -3,9 +3,9 @@ import Foundation
 /// Versioned, forward-only migrations. tools/schema_test.py extracts the SQL between the
 /// BEGIN/END markers and runs it with Python's sqlite3, so keep the markers intact.
 public enum Schema {
-    public static let latestVersion = 2
+    public static let latestVersion = 3
 
-    static let migrations: [(version: Int, sql: String)] = [(1, v1), (2, v2)]
+    static let migrations: [(version: Int, sql: String)] = [(1, v1), (2, v2), (3, v3)]
 
     // BEGIN SQL v1
     static let v1 = """
@@ -116,6 +116,35 @@ public enum Schema {
     CREATE INDEX track_root ON track(root_id);
     """
     // END SQL v2
+
+    // v3: full-text search over title/artist/album/album artist (external-content FTS5 kept in sync by
+    // triggers, accent- and case-insensitive), plus indexes for library views.
+    // BEGIN SQL v3
+    static let v3 = """
+    CREATE VIRTUAL TABLE track_fts USING fts5(
+        title, artist, album, album_artist,
+        content = 'track', content_rowid = 'id',
+        tokenize = 'unicode61 remove_diacritics 2'
+    );
+    CREATE TRIGGER track_fts_insert AFTER INSERT ON track BEGIN
+        INSERT INTO track_fts (rowid, title, artist, album, album_artist)
+        VALUES (new.id, new.title, new.artist, new.album, new.album_artist);
+    END;
+    CREATE TRIGGER track_fts_delete AFTER DELETE ON track BEGIN
+        INSERT INTO track_fts (track_fts, rowid, title, artist, album, album_artist)
+        VALUES ('delete', old.id, old.title, old.artist, old.album, old.album_artist);
+    END;
+    CREATE TRIGGER track_fts_update AFTER UPDATE OF title, artist, album, album_artist ON track BEGIN
+        INSERT INTO track_fts (track_fts, rowid, title, artist, album, album_artist)
+        VALUES ('delete', old.id, old.title, old.artist, old.album, old.album_artist);
+        INSERT INTO track_fts (rowid, title, artist, album, album_artist)
+        VALUES (new.id, new.title, new.artist, new.album, new.album_artist);
+    END;
+    INSERT INTO track_fts (track_fts) VALUES ('rebuild');
+    CREATE INDEX playback_history_track ON playback_history(track_id, played_at DESC);
+    CREATE INDEX track_title ON track(title COLLATE NOCASE);
+    """
+    // END SQL v3
 
     /// Applies pending migrations, each in its own transaction. Refuses to open a database
     /// written by a newer app version rather than corrupting it.
